@@ -23,14 +23,14 @@ export default class ZegoUIKitSignalingPlugin {
       case 'init':
         return ZegoPluginInvitationService.getInstance().init(
           params.appID,
-          params.appSign,
+          params.appSign
         );
       case 'uninit':
         return ZegoPluginInvitationService.getInstance().uninit();
       case 'login':
         return ZegoPluginInvitationService.getInstance().login(
           params.userID,
-          params.userName,
+          params.userName
         );
       case 'logout':
         return ZegoPluginInvitationService.getInstance().logout();
@@ -40,22 +40,22 @@ export default class ZegoUIKitSignalingPlugin {
           params.invitees,
           params.timeout,
           params.type,
-          params.data,
+          params.data
         );
       case 'cancelInvitation':
         return ZegoPluginInvitationService.getInstance().cancelInvitation(
           params.invitees,
-          params.data,
+          params.data
         );
       case 'refuseInvitation':
         return ZegoPluginInvitationService.getInstance().refuseInvitation(
           params.inviterID,
-          params.data,
+          params.data
         );
       case 'acceptInvitation':
         return ZegoPluginInvitationService.getInstance().acceptInvitation(
           params.inviterID,
-          params.data,
+          params.data
         );
       default:
         break;
@@ -64,37 +64,37 @@ export default class ZegoUIKitSignalingPlugin {
   onCallInvitationReceived(callbackID, callback) {
     ZegoPluginInvitationService.getInstance().onCallInvitationReceived(
       callbackID,
-      callback,
+      callback
     );
   }
   onCallInvitationTimeout(callbackID, callback) {
     ZegoPluginInvitationService.getInstance().onCallInvitationTimeout(
       callbackID,
-      callback,
+      callback
     );
   }
   onCallInviteesAnsweredTimeout(callbackID, callback) {
     ZegoPluginInvitationService.getInstance().onCallInviteesAnsweredTimeout(
       callbackID,
-      callback,
+      callback
     );
   }
   onCallInvitationAccepted(callbackID, callback) {
     ZegoPluginInvitationService.getInstance().onCallInvitationAccepted(
       callbackID,
-      callback,
+      callback
     );
   }
   onCallInvitationRejected(callbackID, callback) {
     ZegoPluginInvitationService.getInstance().onCallInvitationRejected(
       callbackID,
-      callback,
+      callback
     );
   }
   onCallInvitationCancelled(callbackID, callback) {
     ZegoPluginInvitationService.getInstance().onCallInvitationCancelled(
       callbackID,
-      callback,
+      callback
     );
   }
 }
