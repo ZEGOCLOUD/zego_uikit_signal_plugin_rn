@@ -1,13 +1,20 @@
 {
   "name": "SignalingPlugin",
   "version": "1.0.0",
-  "private": true,
+  "main": "lib/commonjs/index.js",
+  "module": "lib/module/index.js",
+  "react-native": "src/index",
+  "files": [
+    "lib/",
+    "src/"
+  ],
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "prepare": "bob build"
   },
   "peerDependency": {
     "react": "*",
@@ -27,9 +34,18 @@
     "jest": "^26.6.3",
     "metro-react-native-babel-preset": "0.72.3",
     "prettier": "^2.7.1",
+    "react-native-builder-bob": "^0.20.0",
     "react-test-renderer": "18.1.0"
   },
   "jest": {
     "preset": "react-native"
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      "commonjs",
+      "module"
+    ]
   }
 }
