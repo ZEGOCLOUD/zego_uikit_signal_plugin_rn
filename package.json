@@ -1,12 +1,16 @@
 {
-  "name": "SignalingPlugin",
+  "name": "@zegocloud/zego-signaling-plugin",
   "version": "1.0.0",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
   "react-native": "src/index",
   "files": [
-    "lib/",
-    "src/"
+    "lib",
+    "android",
+    "ios",
+    "zego-signaling-plugin.podspec",
+    "!android/build",
+    "!ios/build"
   ],
   "scripts": {
     "android": "react-native run-android",
