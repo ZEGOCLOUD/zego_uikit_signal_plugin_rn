@@ -1,6 +1,6 @@
 import ZegoSignalingPluginCore from '../core';
 import ZegoPluginResult from '../core/defines';
-import {zlogerror, zloginfo, zlogwarning} from '../utils/logger';
+import {zlogerror, zloginfo} from '../utils/logger';
 
 export default class ZegoPluginInvitationService {
   static shared;
