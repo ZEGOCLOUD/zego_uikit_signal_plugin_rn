@@ -230,7 +230,7 @@ export default class ZegoSignalingPluginCore {
     let inviteUserID = '';
     this._userCallIDs.keys().forEach(key => {
       const value = this._userCallIDs.get(key);
-      if (callID == value) {
+      if (callID === value) {
         inviteUserID = key;
       }
     });
@@ -314,7 +314,7 @@ export default class ZegoSignalingPluginCore {
     return new Promise((resolve, reject) => {
       ZIM.getInstance()
         .callCancel(invitees, callID, config)
-        .then((callID, errorInvitees) => {
+        .then(({callID: resCallID, errorInvitees}) => {
           this._userCallIDs.delete(this._loginUser.userID);
           if (!errorInvitees || !errorInvitees.length) {
             zloginfo(`[Core]Cancel invitation done, call id: ${callID}`);
@@ -337,7 +337,7 @@ export default class ZegoSignalingPluginCore {
     return new Promise((resolve, reject) => {
       ZIM.getInstance()
         .callAccept(callID, config)
-        .then(({callID}) => {
+        .then(({callID: resCallID}) => {
           zloginfo(`[Core]Accept invitation done, call id: ${callID}`);
           resolve(new ZegoPluginResult());
         })
@@ -350,7 +350,7 @@ export default class ZegoSignalingPluginCore {
     return new Promise((resolve, reject) => {
       ZIM.getInstance()
         .callReject(callID, config)
-        .then(({callID}) => {
+        .then(({callID: resCallID}) => {
           zloginfo(`[Core]Reject invitation done, call id: ${callID}`);
           this._userCallIDs.delete(this._getInviterIDByCallID(callID));
           resolve(new ZegoPluginResult());
