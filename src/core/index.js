@@ -31,21 +31,21 @@ export default class ZegoSignalingPluginCore {
     zloginfo('[Core]Register callback for ZIM...');
     ZIM.getInstance().on('error', (zim, errorInfo) => {
       zlogerror(
-        `[Core]Zim error, code:${errorInfo.code}, message:${errorInfo.message}.`,
+        `[Core]Zim error, code:${errorInfo.code}, message:${errorInfo.message}.`
       );
     });
     ZIM.getInstance().on(
       'connectionStateChanged',
       (zim, {state, event, extendedData}) => {
         zloginfo(
-          `[Core]Connection state changed, state:${state}, event:${event}, extended data:${extendedData}`,
+          `[Core]Connection state changed, state:${state}, event:${event}, extended data:${extendedData}`
         );
         this._connectionState = state;
         if (this._connectionState === ZIMConnectionState.Disconnected) {
           zlogwarning('[Core]Disconnected, auto logout.');
           this.logout();
         }
-      },
+      }
     );
     // Callback of the call invitation received by the invitee.
     ZIM.getInstance().on(
@@ -56,7 +56,7 @@ export default class ZegoSignalingPluginCore {
           callID,
           inviter,
           timeout,
-          extendedData,
+          extendedData
         );
         this._userCallIDs.set(inviter, callID);
         const notifyData = {inviter: {id: inviter}};
@@ -67,7 +67,7 @@ export default class ZegoSignalingPluginCore {
           notifyData.data = extendedMap.data;
         }
         this._notifyCallInvitationReceived(notifyData);
-      },
+      }
     );
     // Callback of the disinvitation notification received by the invitee.
     ZIM.getInstance().on(
@@ -77,7 +77,7 @@ export default class ZegoSignalingPluginCore {
           '[Core][callInvitationCancelled callback]',
           callID,
           inviter,
-          extendedData,
+          extendedData
         );
         this._userCallIDs.delete(inviter);
         const notifyData = {
@@ -85,7 +85,7 @@ export default class ZegoSignalingPluginCore {
           data: extendedData,
         };
         this._notifyCallInvitationCancelled(notifyData);
-      },
+      }
     );
     // Callback of the invitation acceptance notification received by the inviter.
     ZIM.getInstance().on(
@@ -95,14 +95,14 @@ export default class ZegoSignalingPluginCore {
           '[Core][callInvitationAccepted callback]',
           callID,
           invitee,
-          extendedData,
+          extendedData
         );
         const notifyData = {
           invitee: {id: invitee, name: ''},
           data: extendedData,
         };
         this._notifyCallInvitationAccepted(notifyData);
-      },
+      }
     );
     // Callback of notification received by the inviter that the inviter has declined the invitation.
     ZIM.getInstance().on(
@@ -112,14 +112,14 @@ export default class ZegoSignalingPluginCore {
           '[Core][callInvitationRejected callback]',
           callID,
           invitee,
-          extendedData,
+          extendedData
         );
         const notifyData = {
           invitee: {id: invitee, name: ''},
           data: extendedData,
         };
         this._notifyCallInvitationRejected(notifyData);
-      },
+      }
     );
     // Call invitation timeout notification callback for the invitee.
     ZIM.getInstance().on('callInvitationTimeout', (zim, {callID}) => {
@@ -137,7 +137,7 @@ export default class ZegoSignalingPluginCore {
         zloginfo(
           '[Core][callInviteesAnsweredTimeout callback]',
           callID,
-          invitees,
+          invitees
         );
         const notifyData = {
           invitees: invitees.map(invitee => {
@@ -146,7 +146,7 @@ export default class ZegoSignalingPluginCore {
           data: '',
         };
         this._notifyCallInviteesAnsweredTimeout(notifyData);
-      },
+      }
     );
   }
   _unregisterEngineCallback() {
@@ -167,7 +167,7 @@ export default class ZegoSignalingPluginCore {
         if (this._onCallInvitationReceivedCallbackMap[callbackID]) {
           this._onCallInvitationReceivedCallbackMap[callbackID](notifyData);
         }
-      },
+      }
     );
   }
   _notifyCallInvitationCancelled(notifyData) {
@@ -176,7 +176,7 @@ export default class ZegoSignalingPluginCore {
         if (this._onCallInvitationCancelledCallbackMap[callbackID]) {
           this._onCallInvitationCancelledCallbackMap[callbackID](notifyData);
         }
-      },
+      }
     );
   }
   _notifyCallInvitationAccepted(notifyData) {
@@ -185,7 +185,7 @@ export default class ZegoSignalingPluginCore {
         if (this._onCallInvitationAcceptedCallbackMap[callbackID]) {
           this._onCallInvitationAcceptedCallbackMap[callbackID](notifyData);
         }
-      },
+      }
     );
   }
   _notifyCallInvitationRejected(notifyData) {
@@ -194,7 +194,7 @@ export default class ZegoSignalingPluginCore {
         if (this._onCallInvitationRejectedCallbackMap[callbackID]) {
           this._onCallInvitationRejectedCallbackMap[callbackID](notifyData);
         }
-      },
+      }
     );
   }
   _notifyCallInvitationTimeout(notifyData) {
@@ -203,7 +203,7 @@ export default class ZegoSignalingPluginCore {
         if (this._onCallInvitationTimeoutCallbackMap[callbackID]) {
           this._onCallInvitationTimeoutCallbackMap[callbackID](notifyData);
         }
-      },
+      }
     );
   }
   _notifyCallInviteesAnsweredTimeout(notifyData) {
@@ -211,10 +211,10 @@ export default class ZegoSignalingPluginCore {
       callbackID => {
         if (this._onCallInviteesAnsweredTimeoutCallbackMap[callbackID]) {
           this._onCallInviteesAnsweredTimeoutCallbackMap[callbackID](
-            notifyData,
+            notifyData
           );
         }
-      },
+      }
     );
   }
   // ------- internal utils ------
@@ -295,7 +295,7 @@ export default class ZegoSignalingPluginCore {
             const errorInviteeIDs = [];
             errorInvitees.forEach(errorInvitee => {
               zlogwarning(
-                `[Core]Invite error, invitee id: ${errorInvitee.userID}, invitee state: ${errorInvitee.state}`,
+                `[Core]Invite error, invitee id: ${errorInvitee.userID}, invitee state: ${errorInvitee.state}`
               );
               errorInviteeIDs.push(errorInvitee.userID);
             });
@@ -322,7 +322,7 @@ export default class ZegoSignalingPluginCore {
           } else {
             errorInvitees.forEach(inviteeID => {
               zlogwarning(
-                `[Core]Cancel invitation error, invitee id: ${inviteeID}`,
+                `[Core]Cancel invitation error, invitee id: ${inviteeID}`
               );
             });
             resolve({...new ZegoPluginResult('', ''), errorInvitees});
@@ -367,7 +367,7 @@ export default class ZegoSignalingPluginCore {
         zloginfo(
           '[Core][onCallInvitationReceived] Remove callback for: [',
           callbackID,
-          '] because callback is not a valid function!',
+          '] because callback is not a valid function!'
         );
         delete this._onCallInvitationReceivedCallbackMap[callbackID];
       }
@@ -381,7 +381,7 @@ export default class ZegoSignalingPluginCore {
         zloginfo(
           '[Core][onCallInvitationCancelled] Remove callback for: [',
           callbackID,
-          '] because callback is not a valid function!',
+          '] because callback is not a valid function!'
         );
         delete this._onCallInvitationCancelledCallbackMap[callbackID];
       }
@@ -395,7 +395,7 @@ export default class ZegoSignalingPluginCore {
         zloginfo(
           '[Core][onCallInvitationAccepted] Remove callback for: [',
           callbackID,
-          '] because callback is not a valid function!',
+          '] because callback is not a valid function!'
         );
         delete this._onCallInvitationAcceptedCallbackMap[callbackID];
       }
@@ -409,7 +409,7 @@ export default class ZegoSignalingPluginCore {
         zloginfo(
           '[Core][onCallInvitationRejected] Remove callback for: [',
           callbackID,
-          '] because callback is not a valid function!',
+          '] because callback is not a valid function!'
         );
         delete this._onCallInvitationRejectedCallbackMap[callbackID];
       }
@@ -423,7 +423,7 @@ export default class ZegoSignalingPluginCore {
         zloginfo(
           '[Core][onCallInvitationTimeout] Remove callback for: [',
           callbackID,
-          '] because callback is not a valid function!',
+          '] because callback is not a valid function!'
         );
         delete this._onCallInvitationTimeoutCallbackMap[callbackID];
       }
@@ -437,7 +437,7 @@ export default class ZegoSignalingPluginCore {
         zloginfo(
           '[Core][onCallInviteesAnsweredTimeout] Remove callback for: [',
           callbackID,
-          '] because callback is not a valid function!',
+          '] because callback is not a valid function!'
         );
         delete this._onCallInviteesAnsweredTimeoutCallbackMap[callbackID];
       }

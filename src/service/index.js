@@ -34,7 +34,7 @@ export default class ZegoPluginInvitationService {
         userID,
         userName,
       },
-      token,
+      token
     );
   }
   logout() {
@@ -53,7 +53,7 @@ export default class ZegoPluginInvitationService {
       data,
     });
     zloginfo(
-      `[Service]Send invitation: invitees: ${invitees}, timeout: ${timeout}, type: ${type}, data: ${data}.`,
+      `[Service]Send invitation: invitees: ${invitees}, timeout: ${timeout}, type: ${type}, data: ${data}.`
     );
     return ZegoSignalingPluginCore.getInstance().invite(invitees, config);
   }
@@ -65,15 +65,15 @@ export default class ZegoPluginInvitationService {
     }
     const config = {extendedData: data};
     const callID = ZegoSignalingPluginCore.getInstance().getCallIDByUserID(
-      ZegoSignalingPluginCore.getInstance().getLocalUser().userID,
+      ZegoSignalingPluginCore.getInstance().getLocalUser().userID
     );
     zloginfo(
-      `[Service]Cancel invitation: callID: ${callID}, invitees: ${invitees}, data: ${data}.`,
+      `[Service]Cancel invitation: callID: ${callID}, invitees: ${invitees}, data: ${data}.`
     );
     return ZegoSignalingPluginCore.getInstance().cancel(
       invitees,
       callID,
-      config,
+      config
     );
   }
   refuseInvitation(inviterID, data) {
@@ -85,7 +85,7 @@ export default class ZegoPluginInvitationService {
     }
     const config = {extendedData: data};
     zloginfo(
-      `[Service]Refuse invitation: callID: ${callID}, inviter id: ${inviterID}, data: ${data}.`,
+      `[Service]Refuse invitation: callID: ${callID}, inviter id: ${inviterID}, data: ${data}.`
     );
     return ZegoSignalingPluginCore.getInstance().reject(callID, config);
   }
@@ -98,44 +98,44 @@ export default class ZegoPluginInvitationService {
     }
     const config = {extendedData: data};
     zloginfo(
-      `[Service]Accept invitation: callID: ${callID}, inviter id: ${inviterID}, data: ${data}.`,
+      `[Service]Accept invitation: callID: ${callID}, inviter id: ${inviterID}, data: ${data}.`
     );
     return ZegoSignalingPluginCore.getInstance().accept(callID, config);
   }
   onCallInvitationReceived(callbackID, callback) {
     ZegoSignalingPluginCore.getInstance().onCallInvitationReceived(
       callbackID,
-      callback,
+      callback
     );
   }
   onCallInvitationTimeout(callbackID, callback) {
     ZegoSignalingPluginCore.getInstance().onCallInvitationTimeout(
       callbackID,
-      callback,
+      callback
     );
   }
   onCallInviteesAnsweredTimeout(callbackID, callback) {
     ZegoSignalingPluginCore.getInstance().onCallInviteesAnsweredTimeout(
       callbackID,
-      callback,
+      callback
     );
   }
   onCallInvitationAccepted(callbackID, callback) {
     ZegoSignalingPluginCore.getInstance().onCallInvitationAccepted(
       callbackID,
-      callback,
+      callback
     );
   }
   onCallInvitationRejected(callbackID, callback) {
     ZegoSignalingPluginCore.getInstance().onCallInvitationRejected(
       callbackID,
-      callback,
+      callback
     );
   }
   onCallInvitationCancelled(callbackID, callback) {
     ZegoSignalingPluginCore.getInstance().onCallInvitationCancelled(
       callbackID,
-      callback,
+      callback
     );
   }
 }
