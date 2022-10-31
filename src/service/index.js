@@ -1,6 +1,6 @@
 import ZegoSignalingPluginCore from '../core';
 import ZegoPluginResult from '../core/defines';
-import {zlogerror, zloginfo} from '../utils/logger';
+import { zlogerror, zloginfo } from '../utils/logger';
 
 export default class ZegoPluginInvitationService {
   static shared;
@@ -41,12 +41,12 @@ export default class ZegoPluginInvitationService {
     return ZegoSignalingPluginCore.getInstance().logout();
   }
   sendInvitation(inviterName, invitees, timeout, type, data) {
-    invitees = invitees.map(invitee => invitee);
+    invitees = invitees.map((invitee) => invitee);
     if (!invitees.length) {
       zlogerror('[Service]Send invitees is empty.');
       return Promise.reject(new ZegoPluginResult());
     }
-    const config = {timeout};
+    const config = { timeout };
     config.extendedData = JSON.stringify({
       inviter_name: inviterName,
       type,
@@ -58,12 +58,12 @@ export default class ZegoPluginInvitationService {
     return ZegoSignalingPluginCore.getInstance().invite(invitees, config);
   }
   cancelInvitation(invitees, data) {
-    invitees = invitees.map(invitee => invitee);
+    invitees = invitees.map((invitee) => invitee);
     if (!invitees.length) {
       zlogerror('[Service]Cancel invitees is empty.');
       return Promise.reject(new ZegoPluginResult());
     }
-    const config = {extendedData: data};
+    const config = { extendedData: data };
     const callID = ZegoSignalingPluginCore.getInstance().getCallIDByUserID(
       ZegoSignalingPluginCore.getInstance().getLocalUser().userID
     );
@@ -83,7 +83,7 @@ export default class ZegoPluginInvitationService {
       zlogerror('[Service]Call id corresponding to the inviterID is empty.');
       return Promise.reject(new ZegoPluginResult());
     }
-    const config = {extendedData: data};
+    const config = { extendedData: data };
     zloginfo(
       `[Service]Refuse invitation: callID: ${callID}, inviter id: ${inviterID}, data: ${data}.`
     );
@@ -96,7 +96,7 @@ export default class ZegoPluginInvitationService {
       zlogerror('[Service]Call id corresponding to the inviterID is empty.');
       return Promise.reject(new ZegoPluginResult());
     }
-    const config = {extendedData: data};
+    const config = { extendedData: data };
     zloginfo(
       `[Service]Accept invitation: callID: ${callID}, inviter id: ${inviterID}, data: ${data}.`
     );
