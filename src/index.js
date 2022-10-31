@@ -1,7 +1,9 @@
 import ZegoPluginInvitationService from './service';
+import ZegoUIKitPluginType from './type';
 
 export default class ZegoUIKitSignalingPlugin {
   static shared;
+  _signaling = ZegoUIKitPluginType.signaling;
   constructor() {
     if (!ZegoUIKitSignalingPlugin.shared) {
       ZegoUIKitSignalingPlugin.shared = this;
@@ -10,13 +12,16 @@ export default class ZegoUIKitSignalingPlugin {
   }
   static getInstance() {
     if (!ZegoUIKitSignalingPlugin.shared) {
-      ZegoUIKitSignalingPlugin.shared = new ZegoUIKitSignalingPlugin()();
+      ZegoUIKitSignalingPlugin.shared = new ZegoUIKitSignalingPlugin();
     }
     return ZegoUIKitSignalingPlugin.shared;
   }
   getVersion() {
     const zimVersion = ZegoPluginInvitationService.getInstance().getVersion();
     return `signaling_plugin:1.0.0;zim:${zimVersion}`;
+  }
+  getPluginType() {
+    return this._signaling;
   }
   invoke(method, params) {
     switch (method) {
@@ -61,40 +66,46 @@ export default class ZegoUIKitSignalingPlugin {
         break;
     }
   }
-  onCallInvitationReceived(callbackID, callback) {
-    ZegoPluginInvitationService.getInstance().onCallInvitationReceived(
-      callbackID,
-      callback
-    );
-  }
-  onCallInvitationTimeout(callbackID, callback) {
-    ZegoPluginInvitationService.getInstance().onCallInvitationTimeout(
-      callbackID,
-      callback
-    );
-  }
-  onCallInviteesAnsweredTimeout(callbackID, callback) {
-    ZegoPluginInvitationService.getInstance().onCallInviteesAnsweredTimeout(
-      callbackID,
-      callback
-    );
-  }
-  onCallInvitationAccepted(callbackID, callback) {
-    ZegoPluginInvitationService.getInstance().onCallInvitationAccepted(
-      callbackID,
-      callback
-    );
-  }
-  onCallInvitationRejected(callbackID, callback) {
-    ZegoPluginInvitationService.getInstance().onCallInvitationRejected(
-      callbackID,
-      callback
-    );
-  }
-  onCallInvitationCancelled(callbackID, callback) {
-    ZegoPluginInvitationService.getInstance().onCallInvitationCancelled(
-      callbackID,
-      callback
-    );
+  registerPluginEventHandler(event, callbackID, callback) {
+    switch (event) {
+      case 'callInvitationReceived':
+        ZegoPluginInvitationService.getInstance().onCallInvitationReceived(
+          callbackID,
+          callback
+        );
+        break;
+      case 'callInvitationTimeout':
+        ZegoPluginInvitationService.getInstance().onCallInvitationTimeout(
+          callbackID,
+          callback
+        );
+        break;
+      case 'callInviteesAnsweredTimeout':
+        ZegoPluginInvitationService.getInstance().onCallInviteesAnsweredTimeout(
+          callbackID,
+          callback
+        );
+        break;
+      case 'callInvitationAccepted':
+        ZegoPluginInvitationService.getInstance().onCallInvitationAccepted(
+          callbackID,
+          callback
+        );
+        break;
+      case 'callInvitationRejected':
+        ZegoPluginInvitationService.getInstance().onCallInvitationRejected(
+          callbackID,
+          callback
+        );
+        break;
+      case 'callInvitationCancelled':
+        ZegoPluginInvitationService.getInstance().onCallInvitationCancelled(
+          callbackID,
+          callback
+        );
+        break;
+      default:
+        break;
+    }
   }
 }
