@@ -68,37 +68,37 @@ export default class ZegoUIKitSignalingPlugin {
   }
   registerPluginEventHandler(event, callbackID, callback) {
     switch (event) {
-      case 'callInvitationReceived':
+      case 'invitationReceived':
         ZegoPluginInvitationService.getInstance().onCallInvitationReceived(
           callbackID,
           callback
         );
         break;
-      case 'callInvitationTimeout':
+      case 'invitationTimeout':
         ZegoPluginInvitationService.getInstance().onCallInvitationTimeout(
           callbackID,
           callback
         );
         break;
-      case 'callInviteesAnsweredTimeout':
+      case 'invitationResponseTimeout':
         ZegoPluginInvitationService.getInstance().onCallInviteesAnsweredTimeout(
           callbackID,
           callback
         );
         break;
-      case 'callInvitationAccepted':
+      case 'invitationAccepted':
         ZegoPluginInvitationService.getInstance().onCallInvitationAccepted(
           callbackID,
           callback
         );
         break;
-      case 'callInvitationRejected':
+      case 'invitationRefused':
         ZegoPluginInvitationService.getInstance().onCallInvitationRejected(
           callbackID,
           callback
         );
         break;
-      case 'callInvitationCancelled':
+      case 'invitationCanceled':
         ZegoPluginInvitationService.getInstance().onCallInvitationCancelled(
           callbackID,
           callback
