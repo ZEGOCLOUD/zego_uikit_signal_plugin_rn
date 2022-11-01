@@ -12,7 +12,7 @@ export default class ZegoPluginInvitationService {
   }
   static getInstance() {
     if (!ZegoPluginInvitationService.shared) {
-      ZegoPluginInvitationService.shared = new ZegoPluginInvitationService()();
+      ZegoPluginInvitationService.shared = new ZegoPluginInvitationService();
     }
     return ZegoPluginInvitationService.shared;
   }

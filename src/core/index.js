@@ -22,7 +22,7 @@ export default class ZegoSignalingPluginCore {
   }
   static getInstance() {
     if (!ZegoSignalingPluginCore.shared) {
-      ZegoSignalingPluginCore.shared = new ZegoSignalingPluginCore()();
+      ZegoSignalingPluginCore.shared = new ZegoSignalingPluginCore();
     }
     return ZegoSignalingPluginCore.shared;
   }
