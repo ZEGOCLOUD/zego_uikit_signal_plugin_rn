@@ -1,4 +1,4 @@
-import ZegoPluginInvitationService from './service';
+import ZegoPluginInvitationService from './services';
 import ZegoUIKitPluginType from './type';
 
 export default class ZegoUIKitSignalingPlugin {
