@@ -253,7 +253,7 @@ export default class ZegoSignalingPluginCore {
       if (!zim) {
         zlogerror('[Core]Create zim error.');
       } else {
-        zlogerror('[Core]Create zim success.');
+        zloginfo('[Core]Create zim success.');
         this._unregisterEngineCallback();
         this._registerEngineCallback();
       }
