@@ -23,11 +23,11 @@
   "peerDependency": {
     "react": "*",
     "react-native": "*",
-    "zego-zim-react-native": ">=2.3.3"
   },
   "dependencies": {
     "react": "18.2.0",
-    "react-native": "0.70.4"
+    "react-native": "0.70.4",
+    "zego-zim-react-native": "^2.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
