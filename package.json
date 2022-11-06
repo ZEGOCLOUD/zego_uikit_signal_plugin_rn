@@ -22,7 +22,7 @@
   },
   "peerDependency": {
     "react": "*",
-    "react-native": "*",
+    "react-native": "*"
   },
   "dependencies": {
     "react": "18.2.0",
