@@ -16,7 +16,7 @@ export default class ZegoUIKitSignalingPlugin {
     }
     return ZegoUIKitSignalingPlugin.shared;
   }
-  getVersion() {
+  static getVersion() {
     const zimVersion = ZegoPluginInvitationService.getInstance().getVersion();
     return `signaling_plugin:1.0.0;zim:${zimVersion}`;
   }
