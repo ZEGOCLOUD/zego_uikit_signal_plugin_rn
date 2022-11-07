@@ -17,8 +17,11 @@ export default class ZegoUIKitSignalingPlugin {
     return ZegoUIKitSignalingPlugin.shared;
   }
   static getVersion() {
-    const zimVersion = ZegoPluginInvitationService.getInstance().getVersion();
-    return `signaling_plugin:1.0.0;zim:${zimVersion}`;
+    return ZegoPluginInvitationService.getInstance()
+      .getVersion()
+      .then((zimVersion) => {
+        return `signaling_plugin:1.0.0;zim:${zimVersion}`;
+      });
   }
   getPluginType() {
     return this._signaling;
