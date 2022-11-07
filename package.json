@@ -22,7 +22,8 @@
   },
   "peerDependency": {
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "zego-zim-react-native": ">=2.4.0"
   },
   "dependencies": {
     "react": "18.2.0",
