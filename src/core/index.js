@@ -261,7 +261,7 @@ export default class ZegoSignalingPluginCore {
       zlogwarning('[Core]Zim has created.');
     }
   }
-  login(userInfo, token) {
+  login(userInfo, token = '') {
     return ZIM.getInstance()
       .login(userInfo, token)
       .then(() => {
