@@ -1,4 +1,7 @@
-import ZIM, { ZIMConnectionState } from 'zego-zim-react-native';
+import ZIM, {
+  ZIMConnectionState,
+  ZIMCallUserState,
+} from 'zego-zim-react-native';
 import ZegoPluginResult from './defines';
 import { zlogerror, zloginfo, zlogwarning } from '../utils/logger';
 
@@ -294,8 +297,14 @@ export default class ZegoSignalingPluginCore {
           } else {
             const errorInviteeIDs = [];
             errorInvitees.forEach((errorInvitee) => {
+              const desc =
+                errorInvitee.state === ZIMCallUserState.Offline
+                  ? 'offine'
+                  : errorInvitee.state === ZIMCallUserState.Inviting
+                  ? 'inviting'
+                  : '';
               zlogwarning(
-                `[Core]Invite error, invitee id: ${errorInvitee.userID}, invitee state: ${errorInvitee.state}`
+                `[Core]Invite error, invitee id: ${errorInvitee.userID}, invitee state: ${errorInvitee.state}, state desc: ${desc}`
               );
               errorInviteeIDs.push(errorInvitee.userID);
             });
