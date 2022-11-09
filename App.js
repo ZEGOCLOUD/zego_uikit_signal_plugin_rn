@@ -5,7 +5,7 @@
  * @format
  * @flow strict-local
  */
-
+import ZegoUIKitSignalingPlugin from './src';
 import React from 'react';
 import {
   SafeAreaView,
