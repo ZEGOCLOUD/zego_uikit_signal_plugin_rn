@@ -5,7 +5,8 @@
  * @format
  * @flow strict-local
  */
-import ZegoUIKitSignalingPlugin from './src';
+import ZegoUIKitSignalingPlugin from './lib/commonjs';
+import KeyCenter from './KeyCenter';
 import React from 'react';
 import {
   SafeAreaView,
@@ -56,6 +57,21 @@ const Section = ({ children, title }) => {
 };
 
 const App = () => {
+  const userID = String(Math.floor(Math.random() * 100000));
+  console.warn('userID', userID);
+  ZegoUIKitSignalingPlugin.getInstance().invoke('init', KeyCenter);
+  ZegoUIKitSignalingPlugin.getInstance().registerPluginEventHandler(
+    'invitationReceived',
+    'test',
+    ({ inviter, type, data }) => {
+      console.warn(inviter, type, data);
+    }
+  );
+  ZegoUIKitSignalingPlugin.getInstance()
+    .invoke('login', { userID, userName: userID })
+    .then(() => {
+      console.warn('Login success');
+    });
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {

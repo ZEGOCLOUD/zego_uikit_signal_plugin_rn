@@ -65,3 +65,5 @@ buck-out/
 
 # generated files by bob
 lib/
+
+KeyCenter.js
