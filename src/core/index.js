@@ -62,7 +62,7 @@ export default class ZegoSignalingPluginCore {
           extendedData
         );
         this._userCallIDs.set(inviter, callID);
-        const notifyData = { inviter: { id: inviter } };
+        const notifyData = { callID, inviter: { id: inviter } };
         if (extendedData) {
           const extendedMap = JSON.parse(extendedData);
           notifyData.inviter.name = extendedMap.inviter_name;
@@ -84,6 +84,7 @@ export default class ZegoSignalingPluginCore {
         );
         this._userCallIDs.delete(inviter);
         const notifyData = {
+          callID,
           inviter: { id: inviter, name: '' },
           data: extendedData,
         };
@@ -101,6 +102,7 @@ export default class ZegoSignalingPluginCore {
           extendedData
         );
         const notifyData = {
+          callID,
           invitee: { id: invitee, name: '' },
           data: extendedData,
         };
@@ -118,6 +120,7 @@ export default class ZegoSignalingPluginCore {
           extendedData
         );
         const notifyData = {
+          callID,
           invitee: { id: invitee, name: '' },
           data: extendedData,
         };
@@ -128,6 +131,7 @@ export default class ZegoSignalingPluginCore {
     ZIM.getInstance().on('callInvitationTimeout', (zim, { callID }) => {
       zloginfo('[Core][callInvitationTimeout callback]', callID);
       const notifyData = {
+        callID,
         inviter: { id: this._getInviterIDByCallID(callID), name: '' },
         data: '',
       };
@@ -143,6 +147,7 @@ export default class ZegoSignalingPluginCore {
           invitees
         );
         const notifyData = {
+          callID,
           invitees: invitees.map((invitee) => {
             return { id: invitee, name: '' };
           }),
@@ -231,7 +236,7 @@ export default class ZegoSignalingPluginCore {
   }
   _getInviterIDByCallID(callID) {
     let inviteUserID = '';
-    this._userCallIDs.keys().forEach((key) => {
+    Array.from(this._userCallIDs.keys()).forEach((key) => {
       const value = this._userCallIDs.get(key);
       if (callID === value) {
         inviteUserID = key;
