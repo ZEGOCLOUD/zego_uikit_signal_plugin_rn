@@ -292,13 +292,19 @@ export default class ZegoSignalingPluginCore {
   }
   invite(invitees, config) {
     return new Promise((resolve, reject) => {
+      console.warn(invitees);
+      console.warn(config);
       ZIM.getInstance()
         .callInvite(invitees, config)
         .then(({ callID, timeout, errorInvitees }) => {
           this._userCallIDs.set(this._loginUser.userID, callID);
           if (!errorInvitees || !errorInvitees.length) {
             zloginfo(`[Core]Invite done, call id: ${callID}`);
-            resolve({ ...new ZegoPluginResult('', ''), errorInvitees: [] });
+            resolve({
+              ...new ZegoPluginResult('', ''),
+              callID,
+              errorInvitees: [],
+            });
           } else {
             const errorInviteeIDs = [];
             errorInvitees.forEach((errorInvitee) => {
@@ -315,6 +321,7 @@ export default class ZegoSignalingPluginCore {
             });
             resolve({
               ...new ZegoPluginResult('', ''),
+              callID,
               errorInvitees: errorInviteeIDs,
             });
           }
