@@ -1,5 +1,5 @@
 {
-  "name": "@zegocloud/zego-uikit-signaling-plugin",
+  "name": "@zegocloud/zego-uikit-signaling-plugin-rn",
   "version": "1.0.0",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
