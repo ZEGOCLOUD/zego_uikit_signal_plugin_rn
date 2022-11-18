@@ -20,7 +20,7 @@
     "lint": "eslint .",
     "prepare": "bob build"
   },
-  "peerDependency": {
+  "peerDependencies": {
     "react": "*",
     "react-native": "*",
     "zego-zim-react-native": ">=2.4.0"
