@@ -1,5 +1,7 @@
 import ZegoPluginInvitationService from './services';
 import { ZegoUIKitPluginType } from './defines';
+import ZegoPluginRoomPropertiesService from './services/ZegoPluginRoomPropertiesService';
+import ZegoPluginUserInRoomAttributesService from './services/ZegoPluginUserInRoomAttributesService';
 
 export default class ZegoUIKitSignalingPlugin {
   static shared;
@@ -65,6 +67,47 @@ export default class ZegoUIKitSignalingPlugin {
           params.inviterID,
           params.data
         );
+      // UserInRoomAttributes
+      case 'joinRoom':
+        return ZegoPluginUserInRoomAttributesService.getInstance().joinRoom(
+          params.roomID
+        );
+      case 'leaveRoom':
+        return ZegoPluginUserInRoomAttributesService.getInstance().leaveRoom();
+      case 'setUsersInRoomAttributes':
+        return ZegoPluginUserInRoomAttributesService.getInstance().setUsersInRoomAttributes(
+          params.key,
+          params.value,
+          params.userIDs
+        );
+      case 'queryUsersInRoomAttributes':
+        return ZegoPluginUserInRoomAttributesService.getInstance().queryUsersInRoomAttributes(
+          params.config
+        );
+      // RoomProperties
+      case 'updateRoomProperty':
+        return ZegoPluginRoomPropertiesService.getInstance().updateRoomProperty(
+          params.key,
+          params.value,
+          params.isDeleteAfterOwnerLeft,
+          params.isForce,
+          params.isUpdateOwner
+        );
+      case 'deleteRoomProperties':
+        return ZegoPluginRoomPropertiesService.getInstance().deleteRoomProperties(
+          params.keys,
+          params.isForce
+        );
+      case 'beginRoomPropertiesBatchOperation':
+        return ZegoPluginRoomPropertiesService.getInstance().beginRoomPropertiesBatchOperation(
+          params.isDeleteAfterOwnerLeft,
+          params.isForce,
+          params.isUpdateOwner
+        );
+      case 'endRoomPropertiesBatchOperation':
+        return ZegoPluginRoomPropertiesService.getInstance().endRoomPropertiesBatchOperation();
+      case 'queryRoomProperties':
+        return ZegoPluginRoomPropertiesService.getInstance().queryRoomProperties();
       default:
         break;
     }
@@ -109,6 +152,20 @@ export default class ZegoUIKitSignalingPlugin {
         break;
       case 'invitationCanceled':
         ZegoPluginInvitationService.getInstance().onCallInvitationCancelled(
+          callbackID,
+          callback
+        );
+        break;
+      // UserInRoomAttributes
+      case 'onUsersInRoomAttributesUpdated':
+        ZegoPluginUserInRoomAttributesService.getInstance().onUsersInRoomAttributesUpdated(
+          callbackID,
+          callback
+        );
+        break;
+      // RoomProperties
+      case 'onRoomPropertiesUpdated':
+        ZegoPluginRoomPropertiesService.getInstance().onRoomPropertiesUpdated(
           callbackID,
           callback
         );
