@@ -82,7 +82,8 @@ export default class ZegoUIKitSignalingPlugin {
         );
       case 'queryUsersInRoomAttributes':
         return ZegoPluginUserInRoomAttributesService.getInstance().queryUsersInRoomAttributes(
-          params.config
+          params.nextFlag,
+          params.count
         );
       // RoomProperties
       case 'updateRoomProperty':

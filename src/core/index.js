@@ -4,6 +4,7 @@ import ZIM, {
 } from 'zego-zim-react-native';
 import ZegoPluginResult from './defines';
 import { zlogerror, zloginfo, zlogwarning } from '../utils/logger';
+import ZegoPluginUserInRoomAttributesCore from './user_in_room_attributes_core';
 
 export default class ZegoSignalingPluginCore {
   static shared = null;
@@ -276,6 +277,9 @@ export default class ZegoSignalingPluginCore {
         zloginfo('[Core]Create zim success.');
         this._unregisterEngineCallback();
         this._registerEngineCallback();
+        // live audio room
+        ZegoPluginUserInRoomAttributesCore.getInstance()._unregisterEngineCallback();
+        ZegoPluginUserInRoomAttributesCore.getInstance()._registerEngineCallback();
       }
     } else {
       zlogwarning('[Core]Zim has created.');
@@ -295,6 +299,8 @@ export default class ZegoSignalingPluginCore {
       .then(() => {
         zloginfo('[Core]Logout success.');
         this._resetDataForLogout();
+        // live audio room
+        ZegoPluginUserInRoomAttributesCore.getInstance()._resetData();
       });
   }
   destroy() {

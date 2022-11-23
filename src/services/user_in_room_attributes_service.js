@@ -27,9 +27,10 @@ export default class ZegoPluginUserInRoomAttributesService {
       userIDs
     );
   }
-  queryUsersInRoomAttributes(config) {
+  queryUsersInRoomAttributes(nextFlag, count) {
     return ZegoPluginUserInRoomAttributesCore.getInstance().queryUsersInRoomAttributes(
-      config
+      nextFlag,
+      count
     );
   }
   onUsersInRoomAttributesUpdated(callbackID, callback) {
