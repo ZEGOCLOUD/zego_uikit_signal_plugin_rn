@@ -1,7 +1,7 @@
 import ZegoPluginInvitationService from './services';
 import { ZegoUIKitPluginType } from './defines';
-import ZegoPluginRoomPropertiesService from './services/ZegoPluginRoomPropertiesService';
-import ZegoPluginUserInRoomAttributesService from './services/ZegoPluginUserInRoomAttributesService';
+import ZegoPluginRoomPropertiesService from './services/room_properties_service';
+import ZegoPluginUserInRoomAttributesService from './services/user_in_room_attributes_service';
 
 export default class ZegoUIKitSignalingPlugin {
   static shared;
