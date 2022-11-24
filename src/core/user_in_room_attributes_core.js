@@ -1,5 +1,4 @@
 import ZIM from 'zego-zim-react-native';
-import ZegoSignalingPluginCore from './index';
 import { zlogerror, zloginfo, zlogwarning } from '../utils/logger';
 import ZegoPluginResult from './defines';
 export default class ZegoPluginUserInRoomAttributesCore {
@@ -24,6 +23,11 @@ export default class ZegoPluginUserInRoomAttributesCore {
     ZIM.getInstance().on(
       'roomMemberAttributesUpdated',
       (zim, { roomID, infos, operatedInfo }) => {
+        zloginfo(
+          `[ZegoPluginUserInRoomAttributesCore]NotifyUsersInRoomAttributesUpdated`,
+          infos,
+          operatedInfo
+        );
         this._notifyUsersInRoomAttributesUpdated({
           infos: infos.map((info) => info.attributesInfo),
           editor: operatedInfo.userID,
@@ -78,6 +82,9 @@ export default class ZegoPluginUserInRoomAttributesCore {
           resolve(new ZegoPluginResult('', ''));
         })
         .catch((error) => {
+          zlogerror(
+            `[ZegoPluginUserInRoomAttributesCore]Failed to join the room, code: ${error.code}, message: ${error.message}`
+          );
           reject(error);
         });
     });
@@ -106,11 +113,17 @@ export default class ZegoPluginUserInRoomAttributesCore {
           resolve(new ZegoPluginResult('', ''));
         })
         .catch((error) => {
+          zlogerror(
+            `[ZegoPluginUserInRoomAttributesCore]Failed to leave the room, code: ${error.code}, message: ${error.message}`
+          );
           reject(error);
         });
     });
   }
-  setUsersInRoomAttributes(key, value, userIDs) {
+  getRoomBaseInfo() {
+    return this._roomBaseInfo;
+  }
+  setUsersInRoomAttributes(attributes, userIDs) {
     if (!ZIM.getInstance()) {
       zlogerror(
         '[ZegoPluginUserInRoomAttributesCore]Please initialize it first.'
@@ -120,7 +133,7 @@ export default class ZegoPluginUserInRoomAttributesCore {
     return new Promise((resolve, reject) => {
       ZIM.getInstance()
         .setRoomMembersAttributes(
-          { [key]: value },
+          attributes,
           userIDs,
           this._roomBaseInfo.roomID,
           { isDeleteAfterOwnerLeft: true }
@@ -136,11 +149,14 @@ export default class ZegoPluginUserInRoomAttributesCore {
           });
         })
         .catch((error) => {
+          zlogerror(
+            `[ZegoPluginUserInRoomAttributesCore]Failed to set the user's attributes, code: ${error.code}, message: ${error.message}`
+          );
           reject(error);
         });
     });
   }
-  queryUsersInRoomAttributes(nextFlag, count) {
+  queryUsersInRoomAttributes(config) {
     if (!ZIM.getInstance()) {
       zlogerror(
         '[ZegoPluginUserInRoomAttributesCore]Please initialize it first.'
@@ -149,10 +165,7 @@ export default class ZegoPluginUserInRoomAttributesCore {
     }
     return new Promise((resolve, reject) => {
       ZIM.getInstance()
-        .queryRoomMemberAttributesList(this._roomBaseInfo.roomID, {
-          nextFlag,
-          count,
-        })
+        .queryRoomMemberAttributesList(this._roomBaseInfo.roomID, config)
         .then(({ roomID, infos, nextFlag: resNextFlag }) => {
           zloginfo(
             `[ZegoPluginUserInRoomAttributesCore]Query attributes of users in room successfully.`
@@ -165,6 +178,9 @@ export default class ZegoPluginUserInRoomAttributesCore {
           resolve(params);
         })
         .catch((error) => {
+          zlogerror(
+            `[ZegoPluginUserInRoomAttributesCore]Failed to query the user's attributes, code: ${error.code}, message: ${error.message}`
+          );
           reject(error);
         });
     });

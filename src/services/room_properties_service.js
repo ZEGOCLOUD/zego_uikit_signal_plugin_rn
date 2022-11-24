@@ -22,18 +22,24 @@ export default class ZegoPluginRoomPropertiesService {
     isForce = false,
     isUpdateOwner = false
   ) {
-    return ZegoPluginRoomPropertiesCore.getInstance().updateRoomProperty(
-      key,
-      value,
-      isDeleteAfterOwnerLeft,
+    const attributes = { [key]: value };
+    const config = {
       isForce,
-      isUpdateOwner
+      isDeleteAfterOwnerLeft,
+      isUpdateOwner,
+    };
+    return ZegoPluginRoomPropertiesCore.getInstance().updateRoomProperty(
+      attributes,
+      config
     );
   }
   deleteRoomProperties(keys = [], isForce) {
+    const config = {
+      isForce,
+    };
     return ZegoPluginRoomPropertiesCore.getInstance().deleteRoomProperties(
       keys,
-      isForce
+      config
     );
   }
   beginRoomPropertiesBatchOperation(
@@ -41,10 +47,13 @@ export default class ZegoPluginRoomPropertiesService {
     isForce = false,
     isUpdateOwner = false
   ) {
-    return ZegoPluginRoomPropertiesCore.getInstance().beginRoomPropertiesBatchOperation(
+    const config = {
       isDeleteAfterOwnerLeft,
       isForce,
-      isUpdateOwner
+      isUpdateOwner,
+    };
+    return ZegoPluginRoomPropertiesCore.getInstance().beginRoomPropertiesBatchOperation(
+      config
     );
   }
   endRoomPropertiesBatchOperation() {

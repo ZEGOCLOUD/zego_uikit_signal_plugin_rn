@@ -21,16 +21,16 @@ export default class ZegoPluginUserInRoomAttributesService {
     return ZegoPluginUserInRoomAttributesCore.getInstance().leaveRoom();
   }
   setUsersInRoomAttributes(key, value, userIDs) {
+    const attributes = { [key]: value };
     return ZegoPluginUserInRoomAttributesCore.getInstance().setUsersInRoomAttributes(
-      key,
-      value,
+      attributes,
       userIDs
     );
   }
   queryUsersInRoomAttributes(nextFlag, count) {
+    const config = { nextFlag, count };
     return ZegoPluginUserInRoomAttributesCore.getInstance().queryUsersInRoomAttributes(
-      nextFlag,
-      count
+      config
     );
   }
   onUsersInRoomAttributesUpdated(callbackID, callback) {
