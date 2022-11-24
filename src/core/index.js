@@ -5,6 +5,7 @@ import ZIM, {
 import ZegoPluginResult from './defines';
 import { zlogerror, zloginfo, zlogwarning } from '../utils/logger';
 import ZegoPluginUserInRoomAttributesCore from './user_in_room_attributes_core';
+import ZegoPluginRoomPropertiesCore from './room_properties_core';
 
 export default class ZegoSignalingPluginCore {
   static shared = null;
@@ -280,6 +281,8 @@ export default class ZegoSignalingPluginCore {
         // live audio room
         ZegoPluginUserInRoomAttributesCore.getInstance()._unregisterEngineCallback();
         ZegoPluginUserInRoomAttributesCore.getInstance()._registerEngineCallback();
+        ZegoPluginRoomPropertiesCore.getInstance()._unregisterEngineCallback();
+        ZegoPluginRoomPropertiesCore.getInstance()._registerEngineCallback();
       }
     } else {
       zlogwarning('[Core]Zim has created.');
