@@ -158,14 +158,14 @@ export default class ZegoUIKitSignalingPlugin {
         );
         break;
       // UserInRoomAttributes
-      case 'onUsersInRoomAttributesUpdated':
+      case 'usersInRoomAttributesUpdated':
         ZegoPluginUserInRoomAttributesService.getInstance().onUsersInRoomAttributesUpdated(
           callbackID,
           callback
         );
         break;
       // RoomProperties
-      case 'onRoomPropertiesUpdated':
+      case 'roomPropertiesUpdated':
         ZegoPluginRoomPropertiesService.getInstance().onRoomPropertiesUpdated(
           callbackID,
           callback

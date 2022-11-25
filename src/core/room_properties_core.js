@@ -165,11 +165,11 @@ export default class ZegoPluginRoomPropertiesCore {
     return new Promise((resolve, reject) => {
       ZIM.getInstance()
         .queryRoomAllAttributes(roomID)
-        .then(({ roomID: resRoomID }) => {
+        .then(({ roomID: resRoomID, roomAttributes }) => {
           zloginfo(
             `[ZegoPluginRoomPropertiesCore]Query room all attributes successfully.`
           );
-          resolve(new ZegoPluginResult('', ''));
+          resolve({ roomAttributes, ...new ZegoPluginResult('', '') });
         })
         .catch((error) => {
           zlogerror(
