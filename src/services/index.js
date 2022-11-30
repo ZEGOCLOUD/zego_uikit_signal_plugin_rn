@@ -16,6 +16,9 @@ export default class ZegoPluginInvitationService {
     }
     return ZegoPluginInvitationService.shared;
   }
+  getZIMInstance() {
+    return ZegoSignalingPluginCore.getInstance().getZIMInstance();
+  }
   getVersion() {
     return ZegoSignalingPluginCore.getInstance().getVersion();
   }

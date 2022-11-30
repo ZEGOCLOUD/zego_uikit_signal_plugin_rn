@@ -266,6 +266,9 @@ export default class ZegoSignalingPluginCore {
     return callID;
   }
   // ------- external method ------
+  getZIMInstance() {
+    return ZIM.getInstance();
+  }
   getVersion() {
     return ZIM.getVersion();
   }

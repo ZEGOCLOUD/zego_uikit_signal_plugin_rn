@@ -25,6 +25,9 @@ export default class ZegoUIKitSignalingPlugin {
         return `signaling_plugin:1.0.0;zim:${zimVersion}`;
       });
   }
+  getZIMInstance() {
+    return ZegoPluginInvitationService.getInstance().getZIMInstance();
+  }
   getPluginType() {
     return this._signaling;
   }
