@@ -114,22 +114,10 @@ export default class ZegoPluginRoomPropertiesCore {
     }
     const roomID =
       ZegoPluginUserInRoomAttributesCore.getInstance().getRoomBaseInfo().roomID;
-    return new Promise((resolve, reject) => {
-      ZIM.getInstance()
-        .beginRoomAttributesBatchOperation(roomID, config)
-        .then(() => {
-          zloginfo(
-            `[ZegoPluginRoomPropertiesCore]Begin batch operate room properties successfully.`
-          );
-          resolve(new ZegoPluginResult('', ''));
-        })
-        .catch((error) => {
-          zlogerror(
-            `[ZegoPluginRoomPropertiesCore]Failed to begin batch operate room properties, code: ${error.code}, message: ${error.message}`
-          );
-          reject(error);
-        });
-    });
+    ZIM.getInstance().beginRoomAttributesBatchOperation(roomID, config);
+    zloginfo(
+      `[ZegoPluginRoomPropertiesCore]Begin batch operate room properties successfully.`
+    );
   }
   endRoomPropertiesBatchOperation() {
     if (!ZIM.getInstance()) {
