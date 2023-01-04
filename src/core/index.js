@@ -48,10 +48,6 @@ export default class ZegoSignalingPluginCore {
         );
         this._connectionState = state;
         this._notifyConnectionStateChanged({ state });
-        if (this._connectionState === ZIMConnectionState.Disconnected) {
-          zlogwarning('[Core]Disconnected, auto logout.');
-          this.logout();
-        }
       }
     );
     // Callback of the call invitation received by the invitee.

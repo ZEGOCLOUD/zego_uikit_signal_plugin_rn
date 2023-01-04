@@ -5,7 +5,7 @@ import ZegoPluginUserInRoomAttributesCore from './user_in_room_attributes_core';
 
 export default class ZegoPluginRoomPropertiesCore {
   static shared;
-  _onRoomPropertyUpdatedCallbackMap = {};
+  _onRoomPropertiesUpdatedCallbackMap = {};
   constructor() {
     if (!ZegoPluginRoomPropertiesCore.shared) {
       ZegoPluginRoomPropertiesCore.shared = this;
@@ -44,16 +44,16 @@ export default class ZegoPluginRoomPropertiesCore {
     zloginfo('[ZegoPluginRoomPropertiesCore]Register callback for ZIM...');
   }
   _unregisterEngineCallback() {
-    zloginfo('[ZegoPluginRoomPropertiesCore]Unregister callback from ZIM...');
+    zloginfo('[ZegoPluginRoomPropertiesCore]Unregister callback from ZIM...', ZIM);
     ZIM.getInstance().off('roomAttributesUpdated');
     ZIM.getInstance().off('roomAttributesBatchUpdated');
   }
   // ------- internal events exec ------
   _notifyRoomPropertiesUpdated(notifyData) {
-    Object.keys(this._onRoomPropertyUpdatedCallbackMap).forEach(
+    Object.keys(this._onRoomPropertiesUpdatedCallbackMap).forEach(
       (callbackID) => {
-        if (this._onRoomPropertyUpdatedCallbackMap[callbackID]) {
-          this._onRoomPropertyUpdatedCallbackMap[callbackID](notifyData);
+        if (this._onRoomPropertiesUpdatedCallbackMap[callbackID]) {
+          this._onRoomPropertiesUpdatedCallbackMap[callbackID](notifyData);
         }
       }
     );
@@ -167,21 +167,21 @@ export default class ZegoPluginRoomPropertiesCore {
         });
     });
   }
-  onRoomPropertyUpdated(callbackID, callback) {
+  onRoomPropertiesUpdated(callbackID, callback) {
     if (!ZIM.getInstance()) {
       zlogerror('[ZegoPluginRoomPropertiesCore]Please initialize it first.');
     }
     if (typeof callback !== 'function') {
-      if (callbackID in this._onRoomPropertyUpdatedCallbackMap) {
+      if (callbackID in this._onRoomPropertiesUpdatedCallbackMap) {
         zloginfo(
-          '[Core][onRoomPropertyUpdated] Remove callback for: [',
+          '[Core][onRoomPropertiesUpdated] Remove callback for: [',
           callbackID,
           '] because callback is not a valid function!'
         );
-        delete this._onRoomPropertyUpdatedCallbackMap[callbackID];
+        delete this._onRoomPropertiesUpdatedCallbackMap[callbackID];
       }
     } else {
-      this._onRoomPropertyUpdatedCallbackMap[callbackID] = callback;
+      this._onRoomPropertiesUpdatedCallbackMap[callbackID] = callback;
     }
   }
 }
