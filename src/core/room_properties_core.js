@@ -5,7 +5,7 @@ import ZegoPluginUserInRoomAttributesCore from './user_in_room_attributes_core';
 
 export default class ZegoPluginRoomPropertiesCore {
   static shared;
-  _onRoomPropertiesUpdatedCallbackMap = {};
+  _onRoomPropertyUpdatedCallbackMap = {};
   constructor() {
     if (!ZegoPluginRoomPropertiesCore.shared) {
       ZegoPluginRoomPropertiesCore.shared = this;
@@ -50,10 +50,10 @@ export default class ZegoPluginRoomPropertiesCore {
   }
   // ------- internal events exec ------
   _notifyRoomPropertiesUpdated(notifyData) {
-    Object.keys(this._onRoomPropertiesUpdatedCallbackMap).forEach(
+    Object.keys(this._onRoomPropertyUpdatedCallbackMap).forEach(
       (callbackID) => {
-        if (this._onRoomPropertiesUpdatedCallbackMap[callbackID]) {
-          this._onRoomPropertiesUpdatedCallbackMap[callbackID](notifyData);
+        if (this._onRoomPropertyUpdatedCallbackMap[callbackID]) {
+          this._onRoomPropertyUpdatedCallbackMap[callbackID](notifyData);
         }
       }
     );
@@ -167,21 +167,21 @@ export default class ZegoPluginRoomPropertiesCore {
         });
     });
   }
-  onRoomPropertiesUpdated(callbackID, callback) {
+  onRoomPropertyUpdated(callbackID, callback) {
     if (!ZIM.getInstance()) {
       zlogerror('[ZegoPluginRoomPropertiesCore]Please initialize it first.');
     }
     if (typeof callback !== 'function') {
-      if (callbackID in this._onRoomPropertiesUpdatedCallbackMap) {
+      if (callbackID in this._onRoomPropertyUpdatedCallbackMap) {
         zloginfo(
-          '[Core][onRoomPropertiesUpdated] Remove callback for: [',
+          '[Core][onRoomPropertyUpdated] Remove callback for: [',
           callbackID,
           '] because callback is not a valid function!'
         );
-        delete this._onRoomPropertiesUpdatedCallbackMap[callbackID];
+        delete this._onRoomPropertyUpdatedCallbackMap[callbackID];
       }
     } else {
-      this._onRoomPropertiesUpdatedCallbackMap[callbackID] = callback;
+      this._onRoomPropertyUpdatedCallbackMap[callbackID] = callback;
     }
   }
 }
