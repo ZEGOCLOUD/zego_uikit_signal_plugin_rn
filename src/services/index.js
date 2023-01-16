@@ -1,11 +1,14 @@
 import ZegoSignalingPluginCore from '../core';
 import ZegoPluginResult from '../core/defines';
 import { zlogerror, zloginfo } from '../utils/logger';
+import ZPNs from 'zego-zpns-react-native';
+import { Platform, } from 'react-native';
 
 export default class ZegoPluginInvitationService {
   static shared;
   constructor() {
     if (!ZegoPluginInvitationService.shared) {
+      this._notifyWhenAppRunningInBackgroundOrQuit = true;
       ZegoPluginInvitationService.shared = this;
     }
     return ZegoPluginInvitationService.shared;
@@ -43,8 +46,50 @@ export default class ZegoPluginInvitationService {
   logout() {
     return ZegoSignalingPluginCore.getInstance().logout();
   }
-  sendInvitation(inviterName, invitees, timeout, type, data) {
-    invitees = invitees.map((invitee) => invitee);
+
+  enableNotifyWhenAppRunningInBackgroundOrQuit(enable, isIOSDevelopmentEnvironment) {
+    this._notifyWhenAppRunningInBackgroundOrQuit = enable;
+
+    if (enable) {
+      if (Platform.OS === 'ios') {
+        ZPNs.getInstance().applyNotificationPermission();
+        ZPNs.enableDebug(isIOSDevelopmentEnvironment);
+        ZPNs.getInstance().registerPush();
+      } else {
+        ZPNs.setPushConfig({ "enableFCMPush": true, "enableHWPush": false, "enableMiPush": false, "enableOppoPush": false, "enableVivoPush": false });
+        
+        ZPNs.getInstance().registerPush();
+      }
+
+
+      // ZPNs.getInstance().on("registered", (message) => {
+      //   console.log("@@@@@@@@@@@@@@@@>>>>>>>>>>>>>>>############", message)
+      // })
+
+      // ZPNs.getInstance().on("notificationArrived", (message) => {
+      //   console.log("@@@@@@@@@@@@@@@@notificationArrived>>>>>>>>>>>>>>>############", getCallID(message))
+      //   setZpnState("notificationArrived: " + getCallID(message))
+      // })
+      // ZPNs.getInstance().on("notificationClicked", (message) => {
+      //   console.log("@@@@@@@@@@@@@@@@notificationClicked>>>>>>>>>>>>>>>############", getCallID(message))
+      //   setZpnState("notificationClicked: " + getCallID(message))
+      // })
+      // ZPNs.getInstance().on("throughMessageReceived", (message) => {
+      //   console.log("@@@@@@@@@@@@@@@@throughMessageReceived>>>>>>>>>>>>>>>############", getCallID(message))
+      //   setZpnState("throughMessageReceived: " + getCallID(message))
+      // })
+    } else {
+      // ZPNs.getInstance().unregisterPush();
+      // ZPNs.getInstance().off("registered")
+      // ZPNs.getInstance().off("notificationArrived")
+      // ZPNs.getInstance().off("notificationClicked")
+      // ZPNs.getInstance().off("throughMessageReceived")
+    }
+
+  }
+  sendInvitation(inviterName, invitees, timeout, type, data, notificationConfig) {
+    
+    // invitees = invitees.map((invitee) => invitee);
     if (!invitees.length) {
       zlogerror('[Service]Send invitees is empty.');
       return Promise.reject(new ZegoPluginResult());
@@ -55,6 +100,15 @@ export default class ZegoPluginInvitationService {
       type,
       data,
     });
+    
+    if (this._notifyWhenAppRunningInBackgroundOrQuit) {
+      config.pushConfig = {
+        title: notificationConfig.title ?? "",
+        content: notificationConfig.message ?? "",
+        resourcesID: notificationConfig.resourceID ?? "",
+        payload: data
+      };
+    }
     zloginfo(
       `[Service]Send invitation: invitees: ${invitees}, timeout: ${timeout}, type: ${type}, data: ${data}.`
     );

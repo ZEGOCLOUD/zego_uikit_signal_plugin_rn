@@ -45,6 +45,8 @@ export default class ZegoUIKitSignalingPlugin {
           params.userID,
           params.userName
         );
+      case 'enableNotifyWhenAppRunningInBackgroundOrQuit':
+        return ZegoPluginInvitationService.getInstance().enableNotifyWhenAppRunningInBackgroundOrQuit(params.enable, params.isIOSDevelopmentEnvironment)
       case 'logout':
         return ZegoPluginInvitationService.getInstance().logout();
       case 'sendInvitation':
@@ -53,7 +55,8 @@ export default class ZegoUIKitSignalingPlugin {
           params.invitees,
           params.timeout,
           params.type,
-          params.data
+          params.data,
+          params.notificationConfig,
         );
       case 'cancelInvitation':
         return ZegoPluginInvitationService.getInstance().cancelInvitation(
@@ -168,8 +171,8 @@ export default class ZegoUIKitSignalingPlugin {
         );
         break;
       // RoomProperties
-      case 'roomPropertyUpdated':
-        ZegoPluginRoomPropertiesService.getInstance().onRoomPropertyUpdated(
+      case 'roomPropertiesUpdated':
+        ZegoPluginRoomPropertiesService.getInstance().onRoomPropertiesUpdated(
           callbackID,
           callback
         );

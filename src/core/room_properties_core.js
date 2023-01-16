@@ -44,7 +44,7 @@ export default class ZegoPluginRoomPropertiesCore {
     zloginfo('[ZegoPluginRoomPropertiesCore]Register callback for ZIM...');
   }
   _unregisterEngineCallback() {
-    zloginfo('[ZegoPluginRoomPropertiesCore]Unregister callback from ZIM...');
+    zloginfo('[ZegoPluginRoomPropertiesCore]Unregister callback from ZIM...', ZIM);
     ZIM.getInstance().off('roomAttributesUpdated');
     ZIM.getInstance().off('roomAttributesBatchUpdated');
   }

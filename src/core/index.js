@@ -50,7 +50,7 @@ export default class ZegoSignalingPluginCore {
         this._notifyConnectionStateChanged({ state });
         if (this._connectionState === ZIMConnectionState.Disconnected) {
           zlogwarning('[Core]Disconnected, auto logout.');
-          this.logout();
+          // this.logout();
         }
       }
     );
