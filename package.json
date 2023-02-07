@@ -1,6 +1,6 @@
 {
   "name": "@zegocloud/zego-uikit-signaling-plugin-rn",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
   "react-native": "src/index",
@@ -19,10 +19,10 @@
     "prepare": "bob build"
   },
   "peerDependencies": {
-    "react": "*",
-    "react-native": "*",
-    "zego-zim-react-native": "*",
-    "zego-zpns-react-native": "*"
+    "react": "^16.8.1",
+    "react-native": ">=0.60.0-rc.0 <1.0.x",
+    "zego-zim-react-native": "^2.5.0",
+    "zego-zpns-react-native": "^2.2.0"
   },
   "dependencies": {
     "react": "^17.0.2",
