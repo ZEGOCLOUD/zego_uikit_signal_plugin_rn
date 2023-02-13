@@ -1,6 +1,6 @@
 {
   "name": "@zegocloud/zego-uikit-signaling-plugin-rn",
-  "version": "1.2.7",
+  "version": "1.2.8",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
   "react-native": "src/index",
