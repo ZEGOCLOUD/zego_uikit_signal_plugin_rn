@@ -6,6 +6,7 @@ import ZegoPluginUserInRoomAttributesCore from './user_in_room_attributes_core';
 export default class ZegoPluginRoomPropertiesCore {
   static shared;
   _onRoomPropertyUpdatedCallbackMap = {};
+  _onInRoomTextMessageReceivedCallbackMap = {};
   constructor() {
     if (!ZegoPluginRoomPropertiesCore.shared) {
       ZegoPluginRoomPropertiesCore.shared = this;
@@ -41,12 +42,17 @@ export default class ZegoPluginRoomPropertiesCore {
         });
       }
     );
+    ZIM.getInstance().on('receiveRoomMessage', (zim, { messageList, fromConversationID }) => {
+      _notifyInRoomTextMessageReceived({ messageList, fromConversationID });
+    });
+
     zloginfo('[ZegoPluginRoomPropertiesCore]Register callback for ZIM...');
   }
   _unregisterEngineCallback() {
     zloginfo('[ZegoPluginRoomPropertiesCore]Unregister callback from ZIM...', ZIM);
     ZIM.getInstance().off('roomAttributesUpdated');
     ZIM.getInstance().off('roomAttributesBatchUpdated');
+    ZIM.getInstance().off('receiveRoomMessage');
   }
   // ------- internal events exec ------
   _notifyRoomPropertiesUpdated(notifyData) {
@@ -54,6 +60,15 @@ export default class ZegoPluginRoomPropertiesCore {
       (callbackID) => {
         if (this._onRoomPropertyUpdatedCallbackMap[callbackID]) {
           this._onRoomPropertyUpdatedCallbackMap[callbackID](notifyData);
+        }
+      }
+    );
+  }
+  _notifyInRoomTextMessageReceived(notifyData) {
+    Object.keys(this._onInRoomTextMessageReceivedCallbackMap).forEach(
+      (callbackID) => {
+        if (this._onInRoomTextMessageReceivedCallbackMap[callbackID]) {
+          this._onInRoomTextMessageReceivedCallbackMap[callbackID](notifyData);
         }
       }
     );
@@ -182,6 +197,23 @@ export default class ZegoPluginRoomPropertiesCore {
       }
     } else {
       this._onRoomPropertyUpdatedCallbackMap[callbackID] = callback;
+    }
+  }
+  onInRoomTextMessageReceived(callbackID, callback) {
+    if (!ZIM.getInstance()) {
+      zlogerror('[ZegoPluginRoomPropertiesCore]Please initialize it first.');
+    }
+    if (typeof callback !== 'function') {
+      if (callbackID in this._onInRoomTextMessageReceivedCallbackMap) {
+        zloginfo(
+          '[Core][onRoomPropertyUpdated] Remove callback for: [',
+          callbackID,
+          '] because callback is not a valid function!'
+        );
+        delete this._onInRoomTextMessageReceivedCallbackMap[callbackID];
+      }
+    } else {
+      this._onInRoomTextMessageReceivedCallbackMap[callbackID] = callback;
     }
   }
 }
