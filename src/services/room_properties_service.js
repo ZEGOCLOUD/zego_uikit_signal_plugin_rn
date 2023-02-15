@@ -68,4 +68,10 @@ export default class ZegoPluginRoomPropertiesService {
       callback
     );
   }
+  onInRoomTextMessageReceived(callbackID, callback) {
+    ZegoPluginRoomPropertiesCore.getInstance().onInRoomTextMessageReceived(
+      callbackID,
+      callback
+    );
+  }
 }

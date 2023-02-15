@@ -177,6 +177,12 @@ export default class ZegoUIKitSignalingPlugin {
           callback
         );
         break;
+      case 'inRoomTextMessageReceived':
+        ZegoPluginRoomPropertiesService.getInstance().onInRoomTextMessageReceived(
+          callbackID,
+          callback
+        );
+        break;
       default:
         break;
     }
