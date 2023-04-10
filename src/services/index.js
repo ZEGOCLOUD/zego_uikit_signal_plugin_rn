@@ -77,9 +77,9 @@ export default class ZegoPluginInvitationService {
       }
 
 
-      // ZPNs.getInstance().on("registered", (message) => {
-      //   console.log("@@@@@@@@@@@@@@@@>>>>>>>>>>>>>>>############", message)
-      // })
+      ZPNs.getInstance().on("registered", (message) => {
+        console.log("@@@@@@@@@@@@@@@@>>>>>>>>>>>>>>>############", message)
+      })
 
       // ZPNs.getInstance().on("notificationArrived", (message) => {
       //   console.log("@@@@@@@@@@@@@@@@notificationArrived>>>>>>>>>>>>>>>############", getCallID(message))
@@ -95,7 +95,7 @@ export default class ZegoPluginInvitationService {
       // })
     } else {
       // ZPNs.getInstance().unregisterPush();
-      // ZPNs.getInstance().off("registered")
+      ZPNs.getInstance().off("registered")
       // ZPNs.getInstance().off("notificationArrived")
       // ZPNs.getInstance().off("notificationClicked")
       // ZPNs.getInstance().off("throughMessageReceived")
