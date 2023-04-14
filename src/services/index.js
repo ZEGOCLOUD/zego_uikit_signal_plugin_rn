@@ -90,7 +90,10 @@ export default class ZegoPluginInvitationService {
 
     if (enable) {
       if (Platform.OS === 'ios') {
-        const CXProviderConfiguration = { localizedName: appName };
+        const CXProviderConfiguration = {
+          localizedName: appName,
+          iconTemplateImageName: "AppIcon",
+        };
         CallKit.setInitConfiguration(CXProviderConfiguration);
         ZPNs.getInstance().applyNotificationPermission();
         ZPNs.enableDebug(isIOSDevelopmentEnvironment);
@@ -248,7 +251,7 @@ export default class ZegoPluginInvitationService {
     const callID =
       ZegoSignalingPluginCore.getInstance().getCallIDByUserID(inviterID);
     if (!callID) {
-      zlogerror('[Service]Call id corresponding to the inviterID is empty.');
+      zloginfo('[Service]Call id corresponding to the inviterID is empty.', inviterID, data);
       return Promise.reject(new ZegoPluginResult());
     }
     const config = { extendedData: data };
