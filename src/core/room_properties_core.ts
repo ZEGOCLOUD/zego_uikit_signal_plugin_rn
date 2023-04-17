@@ -1,12 +1,12 @@
-import ZIM from 'zego-zim-react-native';
+import ZIM, { ZIMMessage, ZIMRoomAttributesBatchOperationConfig, ZIMRoomAttributesDeleteConfig, ZIMRoomAttributesSetConfig, ZIMRoomAttributesUpdateInfo } from 'zego-zim-react-native';
 import { zlogerror, zloginfo, zlogwarning } from '../utils/logger';
 import ZegoPluginResult from './defines';
 import ZegoPluginUserInRoomAttributesCore from './user_in_room_attributes_core';
 
 export default class ZegoPluginRoomPropertiesCore {
-  static shared;
-  _onRoomPropertyUpdatedCallbackMap = {};
-  _onInRoomTextMessageReceivedCallbackMap = {};
+  static shared: ZegoPluginRoomPropertiesCore;
+  _onRoomPropertyUpdatedCallbackMap: { [index: string]: (notifyData: ZIMRoomAttributesUpdateInfo) => void } = {};
+  _onInRoomTextMessageReceivedCallbackMap: { [index: string]: (notifyData: { messageList: ZIMMessage[]; fromConversationID: string }) => void } = {};
   constructor() {
     if (!ZegoPluginRoomPropertiesCore.shared) {
       ZegoPluginRoomPropertiesCore.shared = this;
@@ -43,7 +43,7 @@ export default class ZegoPluginRoomPropertiesCore {
       }
     );
     ZIM.getInstance().on('receiveRoomMessage', (zim, { messageList, fromConversationID }) => {
-      _notifyInRoomTextMessageReceived({ messageList, fromConversationID });
+      this._notifyInRoomTextMessageReceived({ messageList, fromConversationID });
     });
 
     zloginfo('[ZegoPluginRoomPropertiesCore]Register callback for ZIM...');
@@ -55,7 +55,7 @@ export default class ZegoPluginRoomPropertiesCore {
     ZIM.getInstance().off('receiveRoomMessage');
   }
   // ------- internal events exec ------
-  _notifyRoomPropertiesUpdated(notifyData) {
+  _notifyRoomPropertiesUpdated(notifyData: ZIMRoomAttributesUpdateInfo) {
     Object.keys(this._onRoomPropertyUpdatedCallbackMap).forEach(
       (callbackID) => {
         if (this._onRoomPropertyUpdatedCallbackMap[callbackID]) {
@@ -64,7 +64,7 @@ export default class ZegoPluginRoomPropertiesCore {
       }
     );
   }
-  _notifyInRoomTextMessageReceived(notifyData) {
+  _notifyInRoomTextMessageReceived(notifyData: { messageList: ZIMMessage[]; fromConversationID: string }) {
     Object.keys(this._onInRoomTextMessageReceivedCallbackMap).forEach(
       (callbackID) => {
         if (this._onInRoomTextMessageReceivedCallbackMap[callbackID]) {
@@ -74,7 +74,7 @@ export default class ZegoPluginRoomPropertiesCore {
     );
   }
   // ------- external method ------
-  updateRoomProperty(attributes, config) {
+  updateRoomProperty(attributes: Record<string, string>, config: ZIMRoomAttributesSetConfig) {
     if (!ZIM.getInstance()) {
       zlogerror('[ZegoPluginRoomPropertiesCore]Please initialize it first.');
       return Promise.reject();
@@ -98,7 +98,7 @@ export default class ZegoPluginRoomPropertiesCore {
         });
     });
   }
-  deleteRoomProperties(keys, config) {
+  deleteRoomProperties(keys: string[], config: ZIMRoomAttributesDeleteConfig) {
     if (!ZIM.getInstance()) {
       zlogerror('[ZegoPluginRoomPropertiesCore]Please initialize it first.');
       return Promise.reject();
@@ -122,7 +122,7 @@ export default class ZegoPluginRoomPropertiesCore {
         });
     });
   }
-  beginRoomPropertiesBatchOperation(config) {
+  beginRoomPropertiesBatchOperation(config: ZIMRoomAttributesBatchOperationConfig) {
     if (!ZIM.getInstance()) {
       zlogerror('[ZegoPluginRoomPropertiesCore]Please initialize it first.');
       return Promise.reject();
@@ -182,7 +182,7 @@ export default class ZegoPluginRoomPropertiesCore {
         });
     });
   }
-  onRoomPropertyUpdated(callbackID, callback) {
+  onRoomPropertyUpdated(callbackID: string, callback: (notifyData: ZIMRoomAttributesUpdateInfo) => void) {
     if (!ZIM.getInstance()) {
       zlogerror('[ZegoPluginRoomPropertiesCore]Please initialize it first.');
     }
@@ -199,7 +199,7 @@ export default class ZegoPluginRoomPropertiesCore {
       this._onRoomPropertyUpdatedCallbackMap[callbackID] = callback;
     }
   }
-  onInRoomTextMessageReceived(callbackID, callback) {
+  onInRoomTextMessageReceived(callbackID: string, callback: (notifyData: { messageList: ZIMMessage[]; fromConversationID: string }) => void) {
     if (!ZIM.getInstance()) {
       zlogerror('[ZegoPluginRoomPropertiesCore]Please initialize it first.');
     }

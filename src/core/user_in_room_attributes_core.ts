@@ -1,10 +1,13 @@
-import ZIM from 'zego-zim-react-native';
+import ZIM, { ZIMRoomInfo, ZIMRoomMemberAttributesInfo, ZIMRoomMemberAttributesQueryConfig } from 'zego-zim-react-native';
 import { zlogerror, zloginfo, zlogwarning } from '../utils/logger';
 import ZegoPluginResult from './defines';
 export default class ZegoPluginUserInRoomAttributesCore {
-  static shared;
-  _roomBaseInfo = {}; // { roomID: '', roomName: '' }
-  _onUsersInRoomAttributesUpdatedCallbackMap = {};
+  static shared: ZegoPluginUserInRoomAttributesCore;
+  _roomBaseInfo = {} as ZIMRoomInfo; // { roomID: '', roomName: '' }
+  _onUsersInRoomAttributesUpdatedCallbackMap: { [index: string]: (notifyData: {
+    infos: ZIMRoomMemberAttributesInfo[];
+    editor: string;
+  }) => void } = {};
   constructor() {
     if (!ZegoPluginUserInRoomAttributesCore.shared) {
       ZegoPluginUserInRoomAttributesCore.shared = this;
@@ -49,10 +52,13 @@ export default class ZegoPluginUserInRoomAttributesCore {
     this._resetDataForLeaveRoom();
   }
   _resetDataForLeaveRoom() {
-    this._roomBaseInfo = {};
+    this._roomBaseInfo = {} as ZIMRoomInfo;
   }
   // ------- internal events exec ------
-  _notifyUsersInRoomAttributesUpdated(notifyData) {
+  _notifyUsersInRoomAttributesUpdated(notifyData: {
+    infos: ZIMRoomMemberAttributesInfo[];
+    editor: string;
+  }) {
     Object.keys(this._onUsersInRoomAttributesUpdatedCallbackMap).forEach(
       (callbackID) => {
         if (this._onUsersInRoomAttributesUpdatedCallbackMap[callbackID]) {
@@ -64,7 +70,7 @@ export default class ZegoPluginUserInRoomAttributesCore {
     );
   }
   // ------- external method ------
-  joinRoom(roomID) {
+  joinRoom(roomID: string) {
     if (!ZIM.getInstance()) {
       zlogerror(
         '[ZegoPluginUserInRoomAttributesCore]Please initialize it first.'
@@ -123,7 +129,7 @@ export default class ZegoPluginUserInRoomAttributesCore {
   getRoomBaseInfo() {
     return this._roomBaseInfo;
   }
-  setUsersInRoomAttributes(attributes, userIDs) {
+  setUsersInRoomAttributes(attributes: Record<string, string>, userIDs: string[]) {
     if (!ZIM.getInstance()) {
       zlogerror(
         '[ZegoPluginUserInRoomAttributesCore]Please initialize it first.'
@@ -156,7 +162,7 @@ export default class ZegoPluginUserInRoomAttributesCore {
         });
     });
   }
-  queryUsersInRoomAttributes(config) {
+  queryUsersInRoomAttributes(config: ZIMRoomMemberAttributesQueryConfig) {
     if (!ZIM.getInstance()) {
       zlogerror(
         '[ZegoPluginUserInRoomAttributesCore]Please initialize it first.'
@@ -186,7 +192,10 @@ export default class ZegoPluginUserInRoomAttributesCore {
     });
   }
   // ------- external events register ------
-  onUsersInRoomAttributesUpdated(callbackID, callback) {
+  onUsersInRoomAttributesUpdated(callbackID: string, callback: (notifyData: {
+    infos: ZIMRoomMemberAttributesInfo[];
+    editor: string;
+  }) => void) {
     if (!ZIM.getInstance()) {
       zlogerror(
         '[ZegoPluginUserInRoomAttributesCore]Please initialize it first.'

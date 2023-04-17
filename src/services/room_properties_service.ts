@@ -1,7 +1,8 @@
+import { ZIMMessage, ZIMRoomAttributesUpdateInfo } from 'zego-zim-react-native';
 import ZegoPluginRoomPropertiesCore from '../core/room_properties_core';
 
 export default class ZegoPluginRoomPropertiesService {
-  static shared;
+  static shared: ZegoPluginRoomPropertiesService;
   constructor() {
     if (!ZegoPluginRoomPropertiesService.shared) {
       ZegoPluginRoomPropertiesService.shared = this;
@@ -16,9 +17,9 @@ export default class ZegoPluginRoomPropertiesService {
     return ZegoPluginRoomPropertiesService.shared;
   }
   updateRoomProperty(
-    key,
-    value,
-    isDeleteAfterOwnerLeft,
+    key: string,
+    value: string,
+    isDeleteAfterOwnerLeft: boolean,
     isForce = false,
     isUpdateOwner = false
   ) {
@@ -33,7 +34,7 @@ export default class ZegoPluginRoomPropertiesService {
       config
     );
   }
-  deleteRoomProperties(keys = [], isForce) {
+  deleteRoomProperties(keys: string[] = [], isForce: boolean) {
     const config = {
       isForce,
     };
@@ -62,13 +63,13 @@ export default class ZegoPluginRoomPropertiesService {
   queryRoomProperties() {
     return ZegoPluginRoomPropertiesCore.getInstance().queryRoomProperties();
   }
-  onRoomPropertyUpdated(callbackID, callback) {
+  onRoomPropertyUpdated(callbackID: string, callback: (notifyData: ZIMRoomAttributesUpdateInfo) => void) {
     ZegoPluginRoomPropertiesCore.getInstance().onRoomPropertyUpdated(
       callbackID,
       callback
     );
   }
-  onInRoomTextMessageReceived(callbackID, callback) {
+  onInRoomTextMessageReceived(callbackID: string, callback: (notifyData: { messageList: ZIMMessage[]; fromConversationID: string }) => void) {
     ZegoPluginRoomPropertiesCore.getInstance().onInRoomTextMessageReceived(
       callbackID,
       callback

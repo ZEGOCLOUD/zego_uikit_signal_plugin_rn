@@ -2,9 +2,10 @@ import ZegoPluginInvitationService from './services';
 import { ZegoUIKitPluginType } from './defines';
 import ZegoPluginRoomPropertiesService from './services/room_properties_service';
 import ZegoPluginUserInRoomAttributesService from './services/user_in_room_attributes_service';
+import { CXAction } from 'zego-zpns-react-native';
 
 export default class ZegoUIKitSignalingPlugin {
-  static shared;
+  static shared: ZegoUIKitSignalingPlugin;
   _signaling = ZegoUIKitPluginType.signaling;
   constructor() {
     if (!ZegoUIKitSignalingPlugin.shared) {
@@ -31,22 +32,22 @@ export default class ZegoUIKitSignalingPlugin {
   getPluginType() {
     return this._signaling;
   }
-  setAndroidOfflineDataHandler(handler) {
+  setAndroidOfflineDataHandler(handler: (data: any) => void) {
     ZegoPluginInvitationService.getInstance().setAndroidOfflineDataHandler(handler);
   }
-  setIOSOfflineDataHandler(handler) {
+  setIOSOfflineDataHandler(handler: (data: any, uuid: string) => void) {
     ZegoPluginInvitationService.getInstance().setIOSOfflineDataHandler(handler);
   }
-  onCallKitAnswerCall(handler) {
+  onCallKitAnswerCall(handler: (action: CXAction) => void) {
     ZegoPluginInvitationService.getInstance().onCallKitAnswerCall(handler);
   }
-  onCallKitEndCall(handler) {
+  onCallKitEndCall(handler: (action: CXAction) => void) {
     ZegoPluginInvitationService.getInstance().onCallKitEndCall(handler);
   }
-  reportCallKitCallEnded(uuid) {
+  reportCallKitCallEnded(uuid: string) {
     ZegoPluginInvitationService.getInstance().reportCallKitCallEnded(uuid);
   }
-  invoke(method, params) {
+  invoke(method: string, params: any) {
     switch (method) {
       case 'init':
         return ZegoPluginInvitationService.getInstance().init(
@@ -134,7 +135,7 @@ export default class ZegoUIKitSignalingPlugin {
         break;
     }
   }
-  registerPluginEventHandler(event, callbackID, callback) {
+  registerPluginEventHandler(event: string, callbackID: string, callback: any) {
     switch (event) {
       case 'connectionStateChanged':
         ZegoPluginInvitationService.getInstance().onConnectionStateChanged(

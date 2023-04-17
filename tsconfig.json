@@ -1,0 +1,41 @@
+{
+    "compilerOptions": {
+        "module":"es2015",
+        "target": "es2015",
+        "jsx": "react",    
+        "rootDir": "./",
+        "noImplicitAny": true,
+        "experimentalDecorators": true,
+        "preserveConstEnums": true,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "noImplicitReturns": false,
+        "skipLibCheck": true,
+        "moduleResolution":"Node",
+        "allowSyntheticDefaultImports": true,
+        "resolveJsonModule": true,
+        "declarationMap": false
+    },
+    "filesGlob": [
+        "./typings/index.d.ts",
+        "./src/**/*.ts",
+        "./src/**/*.tsx",
+        "./node_modules/typescript/lib/lib.es6.d.ts"
+    ],
+    "types": [
+      "react",
+      "react-dom",
+      "react-native"
+    ],
+    "exclude":[
+        "./metro.config.js",
+        "./.prettierrc.js",
+        "./.eslintrc.js",
+        "./lib",
+        "./npm",
+        "./scripts",
+        "./babel.config.js",
+        "./node_modules"
+    ],
+    "compileOnSave": false
+}

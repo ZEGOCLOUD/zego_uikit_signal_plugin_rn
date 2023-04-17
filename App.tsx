@@ -5,7 +5,7 @@
  * @format
  * @flow strict-local
  */
-import ZegoUIKitSignalingPlugin from './lib/commonjs';
+// import ZegoUIKitSignalingPlugin from "./src";
 import KeyCenter from './KeyCenter';
 import React from 'react';
 import {
@@ -28,7 +28,7 @@ import {
 
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
-const Section = ({ children, title }) => {
+const Section = ({ children, title }: any) => {
   const isDarkMode = useColorScheme() === 'dark';
   return (
     <View style={styles.sectionContainer}>
@@ -59,19 +59,19 @@ const Section = ({ children, title }) => {
 const App = () => {
   const userID = String(Math.floor(Math.random() * 100000));
   console.warn('userID', userID);
-  ZegoUIKitSignalingPlugin.getInstance().invoke('init', KeyCenter);
-  ZegoUIKitSignalingPlugin.getInstance().registerPluginEventHandler(
-    'invitationReceived',
-    'test',
-    ({ inviter, type, data }) => {
-      console.warn(inviter, type, data);
-    }
-  );
-  ZegoUIKitSignalingPlugin.getInstance()
-    .invoke('login', { userID, userName: userID })
-    .then(() => {
-      console.warn('Login success');
-    });
+  // ZegoUIKitSignalingPlugin.getInstance().invoke('init', KeyCenter);
+  // ZegoUIKitSignalingPlugin.getInstance().registerPluginEventHandler(
+  //   'invitationReceived',
+  //   'test',
+  //   ({ inviter, type, data }: any) => {
+  //     console.warn(inviter, type, data);
+  //   }
+  // );
+  // ZegoUIKitSignalingPlugin.getInstance()
+  //   .invoke('login', { userID, userName: userID })
+  //   .then(() => {
+  //     console.warn('Login success');
+  //   });
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {

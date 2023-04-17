@@ -1,8 +1,9 @@
 import ZegoSignalingPluginCore from '../core';
 import ZegoPluginResult from '../core/defines';
 import { zlogerror, zloginfo } from '../utils/logger';
-import ZPNs, { CallKit, CXCallEndedReason } from 'zego-zpns-react-native';
+import ZPNs, { CallKit, CXAction, CXCallEndedReason } from 'zego-zpns-react-native';
 import { Platform, } from 'react-native';
+import { ZIMCallCancelConfig, ZIMCallInviteConfig, ZIMConnectionState } from 'zego-zim-react-native';
 
 ZPNs.setBackgroundMessageHandler(message => {
   zloginfo('ZPNs throughMessageReceived: ', message)
@@ -11,11 +12,12 @@ ZPNs.setBackgroundMessageHandler(message => {
 })
 
 export default class ZegoPluginInvitationService {
-  static shared;
-  _androidOfflineDataHandler;
-  _iOSOfflineDataHandler;
-  _callKitAnswerCallHandler;
-  _callKitEndCallHandler;
+  static shared: ZegoPluginInvitationService;
+  _notifyWhenAppRunningInBackgroundOrQuit: boolean;
+  _androidOfflineDataHandler: (data: any) => void;
+  _iOSOfflineDataHandler: (data: any, uuid: string) => void;
+  _callKitAnswerCallHandler: (action: CXAction) => void;
+  _callKitEndCallHandler: (action: CXAction) => void;
 
   constructor() {
     if (!ZegoPluginInvitationService.shared) {
@@ -30,19 +32,19 @@ export default class ZegoPluginInvitationService {
     }
     return ZegoPluginInvitationService.shared;
   }
-  setAndroidOfflineDataHandler(handler) {
+  setAndroidOfflineDataHandler(handler: (data: any) => void) {
     this._androidOfflineDataHandler = handler;
   }
   getAndroidOfflineDataHandler() {
     return this._androidOfflineDataHandler;
   }
-  setIOSOfflineDataHandler(handler) {
+  setIOSOfflineDataHandler(handler: (data: any, uuid: string) => void) {
     this._iOSOfflineDataHandler = handler;
   }
-  onCallKitAnswerCall(handler) {
+  onCallKitAnswerCall(handler: (action: CXAction) => void) {
     this._callKitAnswerCallHandler = handler;
   }
-  onCallKitEndCall(handler) {
+  onCallKitEndCall(handler: (action: CXAction) => void) {
     this._callKitEndCallHandler = handler;
   }
   getIOSOfflineDataHandler() {
@@ -54,7 +56,7 @@ export default class ZegoPluginInvitationService {
   getEndCallHandle() {
     return this._callKitEndCallHandler;
   }
-  reportCallKitCallEnded(uuid) {
+  reportCallKitCallEnded(uuid: string) {
     return CallKit.getInstance().reportCallEnded(CXCallEndedReason.AnsweredElsewhere, uuid);
   }
   getZIMInstance() {
@@ -63,7 +65,7 @@ export default class ZegoPluginInvitationService {
   getVersion() {
     return ZegoSignalingPluginCore.getInstance().getVersion();
   }
-  init(appID, appSign) {
+  init(appID: number, appSign: string) {
     ZegoSignalingPluginCore.getInstance().create({
       appID,
       appSign,
@@ -72,7 +74,7 @@ export default class ZegoPluginInvitationService {
   uninit() {
     ZegoSignalingPluginCore.getInstance().destroy();
   }
-  login(userID, userName, token) {
+  login(userID: string, userName: string, token?: string) {
     return ZegoSignalingPluginCore.getInstance().login(
       {
         userID,
@@ -85,7 +87,7 @@ export default class ZegoPluginInvitationService {
     return ZegoSignalingPluginCore.getInstance().logout();
   }
 
-  enableNotifyWhenAppRunningInBackgroundOrQuit(enable, isIOSDevelopmentEnvironment, appName) {
+  enableNotifyWhenAppRunningInBackgroundOrQuit(enable: boolean, isIOSDevelopmentEnvironment: boolean, appName: string) {
     this._notifyWhenAppRunningInBackgroundOrQuit = enable;
 
     if (enable) {
@@ -181,14 +183,14 @@ export default class ZegoPluginInvitationService {
     }
 
   }
-  sendInvitation(inviterName, invitees, timeout, type, data, notificationConfig) {
+  sendInvitation(inviterName: string, invitees: string[], timeout: number, type: number, data?: string, notificationConfig?: any) {
 
     // invitees = invitees.map((invitee) => invitee);
     if (!invitees.length) {
       zlogerror('[Service]Send invitees is empty.');
       return Promise.reject(new ZegoPluginResult());
     }
-    const config = { timeout };
+    const config = { timeout } as ZIMCallInviteConfig;
     config.extendedData = JSON.stringify({
       inviter_name: inviterName,
       type,
@@ -208,13 +210,13 @@ export default class ZegoPluginInvitationService {
     );
     return ZegoSignalingPluginCore.getInstance().invite(invitees, config);
   }
-  cancelInvitation(invitees, data) {
+  cancelInvitation(invitees: string[], data?: string) {
     invitees = invitees.map((invitee) => invitee);
     if (!invitees.length) {
       zlogerror('[Service]Cancel invitees is empty.');
       return Promise.reject(new ZegoPluginResult());
     }
-    const config = { extendedData: data };
+    const config = { extendedData: data } as ZIMCallCancelConfig;
     const callID = ZegoSignalingPluginCore.getInstance().getCallIDByUserID(
       ZegoSignalingPluginCore.getInstance().getLocalUser().userID
     );
@@ -227,7 +229,7 @@ export default class ZegoPluginInvitationService {
       config
     );
   }
-  refuseInvitation(inviterID, data) {
+  refuseInvitation(inviterID: string, data?: string) {
     let callID;
     // Parse data and adapt automatic rejection
     if (data) {
@@ -247,7 +249,7 @@ export default class ZegoPluginInvitationService {
     );
     return ZegoSignalingPluginCore.getInstance().reject(callID, config);
   }
-  acceptInvitation(inviterID, data) {
+  acceptInvitation(inviterID: string, data?: string) {
     const callID =
       ZegoSignalingPluginCore.getInstance().getCallIDByUserID(inviterID);
     if (!callID) {
@@ -261,43 +263,68 @@ export default class ZegoPluginInvitationService {
     return ZegoSignalingPluginCore.getInstance().accept(callID, config);
   }
 
-  onConnectionStateChanged(callbackID, callback) {
+  onConnectionStateChanged(callbackID: string, callback: (notifyData: { state: ZIMConnectionState }) => void) {
     ZegoSignalingPluginCore.getInstance().onConnectionStateChanged(
       callbackID,
       callback
     );
   }
-  onCallInvitationReceived(callbackID, callback) {
+  onCallInvitationReceived(callbackID: string, callback: (notifyData: {
+    callID: string;
+    inviter: { name: string; id: string; };
+    type: number;
+    data: string;
+  }) => void) {
     ZegoSignalingPluginCore.getInstance().onCallInvitationReceived(
       callbackID,
       callback
     );
   }
-  onCallInvitationTimeout(callbackID, callback) {
+  onCallInvitationTimeout(callbackID: string, callback: (notifyData: {
+    callID: string;
+    inviter: { id: string; name: string; };
+    data: string;
+  }) => void) {
     ZegoSignalingPluginCore.getInstance().onCallInvitationTimeout(
       callbackID,
       callback
     );
   }
-  onCallInviteesAnsweredTimeout(callbackID, callback) {
+  onCallInviteesAnsweredTimeout(callbackID: string, callback: (notifyData: {
+    callID: string;
+    invitees: { id: string; name: string; }[];
+    data: string;
+  }) => void) {
     ZegoSignalingPluginCore.getInstance().onCallInviteesAnsweredTimeout(
       callbackID,
       callback
     );
   }
-  onCallInvitationAccepted(callbackID, callback) {
+  onCallInvitationAccepted(callbackID: string, callback: (notifyData: {
+    callID: string;
+    invitee: { id: string; name: string; };
+    data: string;
+  }) => void) {
     ZegoSignalingPluginCore.getInstance().onCallInvitationAccepted(
       callbackID,
       callback
     );
   }
-  onCallInvitationRejected(callbackID, callback) {
+  onCallInvitationRejected(callbackID: string, callback: (notifyData: {
+    callID: string;
+    invitee: { id: string; name: string; };
+    data: string;
+  }) => void) {
     ZegoSignalingPluginCore.getInstance().onCallInvitationRejected(
       callbackID,
       callback
     );
   }
-  onCallInvitationCancelled(callbackID, callback) {
+  onCallInvitationCancelled(callbackID: string, callback: (notifyData: {
+    callID: string;
+    inviter: { id: string; name: string; };
+    data: string;
+  }) => void) {
     ZegoSignalingPluginCore.getInstance().onCallInvitationCancelled(
       callbackID,
       callback
