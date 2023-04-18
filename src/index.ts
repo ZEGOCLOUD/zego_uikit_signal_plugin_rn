@@ -132,7 +132,7 @@ export default class ZegoUIKitSignalingPlugin {
       case 'queryRoomProperties':
         return ZegoPluginRoomPropertiesService.getInstance().queryRoomProperties();
       default:
-        break;
+        return Promise.reject();
     }
   }
   registerPluginEventHandler(event: string, callbackID: string, callback: any) {

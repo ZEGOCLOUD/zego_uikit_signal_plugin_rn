@@ -5,7 +5,7 @@
  * @format
  * @flow strict-local
  */
-// import ZegoUIKitSignalingPlugin from "./src";
+import ZegoUIKitSignalingPlugin from "./src";
 import KeyCenter from './KeyCenter';
 import React from 'react';
 import {
@@ -59,19 +59,19 @@ const Section = ({ children, title }: any) => {
 const App = () => {
   const userID = String(Math.floor(Math.random() * 100000));
   console.warn('userID', userID);
-  // ZegoUIKitSignalingPlugin.getInstance().invoke('init', KeyCenter);
-  // ZegoUIKitSignalingPlugin.getInstance().registerPluginEventHandler(
-  //   'invitationReceived',
-  //   'test',
-  //   ({ inviter, type, data }: any) => {
-  //     console.warn(inviter, type, data);
-  //   }
-  // );
-  // ZegoUIKitSignalingPlugin.getInstance()
-  //   .invoke('login', { userID, userName: userID })
-  //   .then(() => {
-  //     console.warn('Login success');
-  //   });
+  ZegoUIKitSignalingPlugin.getInstance().invoke('init', KeyCenter);
+  ZegoUIKitSignalingPlugin.getInstance().registerPluginEventHandler(
+    'invitationReceived',
+    'test',
+    ({ inviter, type, data }: any) => {
+      console.warn(inviter, type, data);
+    }
+  );
+  (ZegoUIKitSignalingPlugin.getInstance()
+    .invoke('login', { userID, userName: userID }) as Promise<void>)
+    .then(() => {
+      console.warn('Login success');
+    });
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
