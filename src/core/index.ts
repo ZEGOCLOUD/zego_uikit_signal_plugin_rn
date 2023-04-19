@@ -16,6 +16,7 @@ import ZegoPluginRoomPropertiesCore from './room_properties_core';
 export default class ZegoSignalingPluginCore {
   static shared: ZegoSignalingPluginCore;
   _loginUser = {} as ZIMUserInfo;
+  _isLogin = false;
   _callIDUsers = new Map(); // <zim call id, user id>
   _connectionState = ZIMConnectionState.Disconnected;
   _onConnectionStateChangedCallbackMap: { [index: string]: (notifyData: { state: ZIMConnectionState }) => void } = {};
@@ -305,6 +306,7 @@ export default class ZegoSignalingPluginCore {
     this._resetDataForLogout();
   }
   _resetDataForLogout() {
+    this._isLogin = false;
     this._loginUser = {} as ZIMUserInfo;
     this._callIDUsers.clear();
     this._connectionState = ZIMConnectionState.Disconnected;
@@ -354,12 +356,18 @@ export default class ZegoSignalingPluginCore {
     }
   }
   login(userInfo: ZIMUserInfo, token = '') {
-    return ZIM.getInstance()
-      .login(userInfo, token)
-      .then(() => {
-        zloginfo('[Core]Login success.');
-        this._loginUser = userInfo;
-      });
+    if (!this._isLogin) {
+      return ZIM.getInstance()
+        .login(userInfo, token)
+        .then(() => {
+          zloginfo('[Core]Login success.');
+          this._loginUser = userInfo;
+          this._isLogin = true;
+        });
+    } else {
+      zloginfo('[Core]Login already success.');
+      return Promise.resolve();
+    }
   }
   logout() {
     return ZIM.getInstance()
